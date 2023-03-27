@@ -51,21 +51,24 @@ if __name__ == "__main__":
     topic = input("Enter a topic: ")
     adjective = input("Enter an adjective (e.g., intriguing, funny, sad): ")
     num_facts = input("Enter the number of facts (e.g., 5, 10, 20): ")
-    format = input("Enter the format (e.g., list, paragraph, bullet points): ")
+    format_ = input(
+        "Enter the format (e.g., list, paragraph, bullet points): ")
     importance = input(
         "Enter the importance (e.g., most important, least important, random): ")
-    category = input("Enter the category (e.g., history, nutrition, uses): ")
+    category = input(
+        "Enter the category (e.g., history, nutrition, sports, uses, etc.): ")
     simplify = input("Simplify the text? (y/n): ")
 
     # Generate text
-    prompt = f"Write {num_facts} {adjective} {importance} facts about {topic} in the {category} category in {format} format:\n\n"
+    prompt = f"Write {num_facts} {adjective} {importance} facts about {topic} in the {category} category in {format_} format:\n\n"
     if simplify == "y":
         prompt += "\nSimplify the text."
 
     generated_text = generate_text(prompt)
 
     # Remove blank lines
-    lines = [line for line in generated_text.splitlines() if line.strip()]  # filter out blank lines
+    lines = [line for line in generated_text.splitlines() if line.strip()
+             ]  # filter out blank lines
     result = "\n".join(lines)
 
     # Save to doc file
