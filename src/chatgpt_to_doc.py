@@ -9,7 +9,8 @@ from dotenv import load_dotenv
 import logging
 
 # Configure logging
-logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(filename='app.log', filemode='w',
+                    format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # Load the API key from .env file
 load_dotenv()
@@ -22,7 +23,7 @@ def generate_text(prompt, retries=3):
             response = openai.Completion.create(
                 engine="text-davinci-002",
                 prompt=prompt,
-                max_tokens=200, # Try to keep this below 200
+                max_tokens=200,  # Try to keep this below 200
                 n=1,
                 stop=None,
                 temperature=0.5,
@@ -104,7 +105,7 @@ if __name__ == "__main__":
 
     # Remove blank lines
     lines = [line for line in generated_text.splitlines() if line.strip()
-            ]  # filter out blank lines
+             ]  # filter out blank lines
     result = "\n".join(lines)
 
     # Save to doc file
