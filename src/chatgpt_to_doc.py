@@ -6,6 +6,10 @@ from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
 from docx.shared import Pt
 from termcolor import colored
 from dotenv import load_dotenv
+import logging
+
+# Configure logging
+logging.basicConfig(filename='app.log', filemode='w', format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # Load the API key from .env file
 load_dotenv()
@@ -27,11 +31,11 @@ def generate_text(prompt, retries=3):
             return response.choices[0].text.strip()
 
         except openai.error.APIError as e:
-            print(f"OpenAI API error ({e.status}): {e.message}")
+            logging.error(f"OpenAI API error ({e.status}): {e.message}")
             if i == retries - 1:
                 raise e
             wait_time = 2 ** i
-            print(f"Retrying in {wait_time} seconds...")
+            logging.info(f"Retrying in {wait_time} seconds...")
             time.sleep(wait_time)
 
 
@@ -93,11 +97,14 @@ if __name__ == "__main__":
     else:
         prompt += "\nDon't simplify the text."
 
+    # Log prompt
+    logging.info(f"Prompt: {prompt}")
+
     generated_text = generate_text(prompt)
 
     # Remove blank lines
     lines = [line for line in generated_text.splitlines() if line.strip()
-             ]  # filter out blank lines
+            ]  # filter out blank lines
     result = "\n".join(lines)
 
     # Save to doc file
@@ -107,6 +114,9 @@ if __name__ == "__main__":
     # Save generated text to docx file
     save_to_doc_file(
         output_filename, f"{num_facts} {adjective.title()} {importance.title()} Facts About {topic.title()} ({category.title()})", result)
+
+    # Log file saved
+    logging.info(f"Generated text saved to {output_filename}")
 
     # Print results
     print(colored(f"\nGenerated text saved to {output_filename}", "green"))
